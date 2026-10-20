@@ -2,6 +2,10 @@
 
 A small mobile-first incremental PWA: collect energy, build an orbital fleet, research upgrades, and launch voyages for permanent stardust bonuses. No accounts, ads, analytics, backend, or production dependencies.
 
+**Play:** https://apoc-.github.io/starling/
+
+**Source:** https://github.com/Apoc-/starling
+
 ## Run
 
 Requires Node.js 22+ and npm.

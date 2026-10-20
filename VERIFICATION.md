@@ -57,4 +57,14 @@ No obvious clipping/overlap in inspected layouts; the fixed mobile navigation de
 - Full first-minutes real-time opening: PASS via `node scripts/play-opening.mjs`, using fresh storage and actual emulated touch controls (no imported progress or clock acceleration). Over 120.087 seconds: 199 taps; first drone at 5.574s, tap upgrade at 33.795s, solar array at 54.919s, production upgrade at 106.385s. Final rate 9 energy/sec, saved on device, zero page errors. Later pacing remains simulation-based, and midgame fixtures are explicitly imported test saves. No retention/fun claim.
 - Pacing is proof-of-concept quality: upgrade-first idle choices can stall; efficient active play reaches first-voyage eligibility earlier than the original assumption.
 - Old app-shell cache pruning is deferred. Caches are retained to avoid deleting assets needed by old clients.
-- GitHub Pages and live HTTPS smoke/offline verification: BLOCKED. No GitHub account is authenticated; the OAuth device authorization expired without completion. No public repository/site URL has been created or claimed. The included workflow is ready but has not run on GitHub.
+## GitHub Pages release
+
+- Live HTTPS app: https://apoc-.github.io/starling/
+- Public source: https://github.com/Apoc-/starling
+- GitHub Actions build/deploy: PASS, https://github.com/Apoc-/starling/actions/runs/39399721113, deploying game revision `cc98f51dbe7bbdb4c9cf5570ffcfa460ba1512a1`.
+- `TEST_URL=https://apoc-.github.io/starling/ npm run test:e2e`: PASS, 12 browser tests; three local deployment-mutation tests deliberately skipped against the public site. Those same three passed locally as part of the 15-test production-build suite.
+- Live tests cover real HTTPS worker control and offline reload/reopen/gameplay, touch input, buying/persistence, upgrades/voyages/backups, save failures, clock catch-up, multiple tabs, and responsive layouts.
+- Pages configuration read back: workflow build, public site, HTTPS enforced.
+- Earlier publishing blockage was a configuration lookup error, not missing credentials: the shell's HOME differed from the location of existing GitHub CLI configuration. Existing authorization was used; no additional user login was needed.
+
+Physical-device installation and non-Chromium gaps listed above remain unverified.
