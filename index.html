@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#102b30">
+  <meta name="description" content="Build a little station. Catch a little starlight. A quiet incremental game that works offline.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Starling — a little orbital idle</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./src/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#station" aria-label="Starling home"><span class="brand-mark" aria-hidden="true">✳</span><span><h1>Starling</h1><small>A LITTLE ORBITAL IDLE</small></span></a>
+    <button id="settings-open" class="icon-button" aria-label="Open settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M8 4v6m8 4v6"/></svg></button>
+  </header>
+  <main>
+    <div id="notice" class="notice" role="status" hidden></div>
+    <div id="update-banner" class="notice" hidden>A fresh transmission is ready. <button id="update-now" class="text-button">Save & update</button></div>
+    <div class="game-layout">
+      <section id="station" class="station-column" aria-label="Your station">
+        <div class="section-kicker"><span>01 / YOUR STATION</span><span id="connection"><i class="status-dot"></i> Connecting</span></div>
+        <article class="collector-card">
+          <div class="hero-top"><span class="eyebrow">STORED ENERGY</span><span id="sector" class="sector">SECTOR 001</span></div>
+          <div class="energy-line"><strong id="energy">0</strong><span>e</span></div>
+          <p class="income"><span class="income-dot"></span><span id="rate">0</span> energy / sec</p>
+          <div class="orbital-scene">
+            <svg class="orbit-art" viewBox="0 0 400 240" aria-hidden="true">
+              <g fill="none" stroke="currentColor"><ellipse cx="200" cy="124" rx="162" ry="60" transform="rotate(-22 200 124)"/><circle cx="200" cy="124" r="99" stroke-dasharray="2 9"/><ellipse cx="200" cy="124" rx="146" ry="39" transform="rotate(29 200 124)"/></g>
+              <g fill="#d4e9dc"><circle cx="52" cy="95" r="3"/><circle cx="344" cy="179" r="2"/><circle cx="308" cy="41" r="2"/><path d="M68 176v12m-6-6h12M326 90v10m-5-5h10" stroke="#d4e9dc" stroke-width="1.2"/></g>
+              <g class="satellite" transform="translate(297 71) rotate(25)"><rect x="-25" y="-7" width="16" height="14" rx="2" fill="#b2cbc2"/><rect x="9" y="-7" width="16" height="14" rx="2" fill="#b2cbc2"/><path d="M-17-7V7M17-7V7" stroke="#102b30"/><rect x="-6" y="-10" width="12" height="20" rx="4" fill="#ffce96"/><path d="M0-10v-7" stroke="#ffce96"/></g>
+            </svg>
+            <button id="collect" class="collect-orb" aria-label="Collect energy" disabled><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 12C54 39 61 46 88 50C61 54 54 61 50 88C46 61 39 54 12 50C39 46 46 39 50 12Z" fill="#fff3d9"/><circle cx="72" cy="24" r="3" fill="#fff3d9"/></svg></button>
+            <span id="tap-feedback" class="tap-feedback" aria-hidden="true"></span>
+          </div>
+          <div class="tap-caption"><span>Tap the star to collect</span><strong>+<span id="tap-value">1</span> e / tap <span aria-hidden="true">↗</span></strong></div>
+        </article>
+        <article class="mission-card">
+          <div class="mission-icon" aria-hidden="true">↗</div><div class="mission-content"><div class="mission-heading"><h2 id="mission-title">A small beginning</h2><span id="mission-count">0 / 10</span></div><p id="mission-description">Collect 10 energy to build your first drone.</p><div class="progress-track"><div id="mission-fill"></div></div></div>
+        </article>
+        <section id="voyage" class="voyage-card" aria-labelledby="voyage-title">
+          <div class="section-kicker"><span>THE NEXT HORIZON</span><span aria-hidden="true">✧</span></div>
+          <h2 id="voyage-title">Small station.<br><em>Infinite possibility.</em></h2>
+          <p>Earn 10,000 energy this voyage, then set out again. Bring home stardust for a permanent boost.</p>
+          <div class="voyage-stats"><span><strong id="stardust">0</strong> stardust</span><span><strong id="boost">+0%</strong> all energy</span></div>
+          <button id="voyage-open" class="primary-button" disabled>Launch a new voyage <span aria-hidden="true">↗</span></button>
+          <small id="voyage-hint">0 / 10k energy earned this voyage</small>
+        </section>
+      </section>
+      <div class="build-column">
+        <section id="production" aria-labelledby="production-title">
+          <div class="section-heading"><div><span class="eyebrow dark-eyebrow">LET IT GROW</span><h2 id="production-title">Your little fleet</h2></div><span class="section-number">02</span></div>
+          <p class="section-description">Put your energy to work. Your fleet keeps collecting while you're away.</p>
+          <div id="producers" class="producer-list"></div>
+        </section>
+        <section id="lab" aria-labelledby="lab-title">
+          <div class="section-heading"><div><span class="eyebrow dark-eyebrow">WORK SMARTER</span><h2 id="lab-title">Station upgrades</h2></div><span class="section-number">03</span></div>
+          <div id="upgrades" class="upgrade-list"></div>
+        </section>
+        <div class="field-note"><span aria-hidden="true">✦</span><p>No rush, captain. Your station earns at full speed for up to <strong>4 hours</strong> away. No ads. No accounts. Just a little starlight.</p></div>
+      </div>
+    </div>
+    <footer><span>STARLING <span class="footer-star" aria-hidden="true">✳</span> POC 0.1</span><span id="save-status" role="status">Loading station…</span></footer>
+  </main>
+  <nav class="bottom-nav" aria-label="Station navigation"><a href="#station"><span aria-hidden="true">◉</span> Station</a><a href="#production"><span aria-hidden="true">▦</span> Fleet</a><a href="#lab"><span aria-hidden="true">✧</span> Lab</a><a href="#voyage"><span aria-hidden="true">↗</span> Voyage</a></nav>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <dialog id="voyage-dialog" aria-labelledby="voyage-dialog-title"><div class="dialog-kicker">THE NEXT CHAPTER</div><h2 id="voyage-dialog-title">Ready for a fresh sky?</h2><p id="voyage-preview"></p><p>Your energy, fleet, and upgrades reset. Stardust, voyage count, and lifetime energy stay with you.</p><div class="dialog-actions"><button id="voyage-cancel" class="secondary-button">Stay here</button><button id="voyage-confirm" class="primary-button">Begin voyage</button></div></dialog>
+  <dialog id="settings-dialog" aria-labelledby="settings-title"><div class="dialog-top"><h2 id="settings-title">Flight manual</h2><button id="settings-close" class="icon-button" aria-label="Close settings">×</button></div><p>Tap the star. Build a fleet. Upgrade your station. Launch a voyage at 10,000 earned energy to collect stardust; each adds +25% to taps and production.</p><h3>Your station, your device</h3><p>Progress is saved locally, not to an account. Export a backup before clearing browser data or changing devices.</p><p id="storage-info">Checking storage…</p><div class="settings-actions"><button id="export-save" class="secondary-button">Export backup</button><button id="import-open" class="secondary-button">Import backup</button><button id="restore-backup" class="secondary-button">Recover previous save</button></div><input id="import-file" type="file" accept=".json,application/json" hidden><hr><h3>Take Starling with you</h3><p id="install-help">On iPhone or iPad: open in Safari, tap Share, then Add to Home Screen. On Android: use your browser menu → Install app / Add to Home screen. Open once online before playing offline.</p><button id="install" class="primary-button" hidden>Install Starling</button><small>Offline income: 100% rate, capped at 4 hours. Backwards clock changes never award energy. Local saves cannot prevent deliberate clock changes.</small></dialog>
+  <dialog id="import-dialog" aria-labelledby="import-title"><h2 id="import-title">Replace your station?</h2><p id="import-preview"></p><p>This replaces your current progress. Export a backup first if you want to keep it.</p><div class="dialog-actions"><button id="import-cancel" class="secondary-button">Cancel</button><button id="import-confirm" class="primary-button">Replace progress</button></div></dialog>
+  <noscript>Starling needs JavaScript to run. Please enable JavaScript and reopen this page.</noscript>
+</body>
+</html>

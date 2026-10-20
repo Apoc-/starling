@@ -1,0 +1,18 @@
+{
+  "id": "./",
+  "name": "Starling — Orbital Idle",
+  "short_name": "Starling",
+  "description": "A little station. A little starlight. An offline incremental game.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f5f3ec",
+  "theme_color": "#102b30",
+  "icons": [
+    {"src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

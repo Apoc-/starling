@@ -1,0 +1,47 @@
+import { test, expect } from '@playwright/test';
+test('mobile opening: tap, automate, and preserve a purchase after reload', async ({page}) => {
+  const errors=[]; page.on('pageerror', error=>errors.push(error.message));
+  await page.goto('./');
+  await expect(page.getByRole('heading',{name:'Starling',exact:true})).toBeVisible();
+  const tap=page.getByRole('button',{name:'Collect energy'});
+  await expect(tap).toBeEnabled();
+  const buy=page.getByRole('button',{name:'Build Collector drone'});
+  await expect(buy).toBeDisabled();
+  for (let i=0;i<10;i++) await tap.click();
+  await expect(page.locator('#energy')).toHaveText('10');
+  await expect(buy).toBeEnabled();
+  await buy.click();
+  await expect(page.locator('#owned-scout')).toHaveText('1');
+  await expect(page.locator('#rate')).toHaveText('0.5');
+  await expect(page.locator('#save-status')).toHaveText('Saved on this device');
+  await page.reload();
+  await expect(page.locator('#owned-scout')).toHaveText('1');
+  await expect(page.locator('#rate')).toHaveText('0.5');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  expect(errors).toEqual([]);
+  await page.screenshot({path:'artifacts/mobile-opening.png',fullPage:true});
+});
+
+test('PWA shell is controlled, loads icons, and reopens offline with gameplay', async ({page,context})=>{
+  await page.goto('./');
+  await expect(page.getByRole('button',{name:'Collect energy'})).toBeEnabled();
+  await expect.poll(()=>page.evaluate(async()=>!!(await navigator.serviceWorker.getRegistration())?.active),{timeout:5000}).toBe(true);
+  await page.reload();
+  await expect.poll(()=>page.evaluate(()=>!!navigator.serviceWorker.controller)).toBe(true);
+  const manifest=await (await page.request.get('manifest.webmanifest')).json();
+  expect(manifest.start_url).toBe('./');expect(manifest.scope).toBe('./');
+  for(const icon of manifest.icons) expect((await page.request.get(icon.src)).status()).toBe(200);
+  await page.getByRole('button',{name:'Collect energy'}).click();
+  await expect(page.locator('#energy')).toHaveText('1');
+  await context.setOffline(true);await page.reload();
+  await expect(page.locator('#energy')).toHaveText('1');
+  await page.getByRole('button',{name:'Collect energy'}).click();
+  await expect(page.locator('#energy')).toHaveText('2');
+  await expect(page.locator('#connection')).toContainText('Offline');
+  const savedUrl=page.url();await page.close();
+  const reopened=await context.newPage();await reopened.goto(savedUrl);
+  await expect(reopened.locator('#energy')).toHaveText('2');
+  await expect(reopened.getByRole('button',{name:'Collect energy'})).toBeEnabled();
+  const absent=await reopened.evaluate(async()=>{const r=await fetch('./absent-asset.js').catch(()=>null);return r && {status:r.status,type:r.headers.get('content-type')};});
+  expect(absent?.type||'').not.toContain('text/html');
+});
